@@ -16,19 +16,22 @@ import { SectionHeader } from "./section-header";
 
 import SectionWrapper from "../ui/section-wrapper";
 import ScrollingPreview from "../scrolling-preview";
+import type { ManagedProject, PortfolioContent } from "@/lib/portfolio-content";
 
-const ProjectsSection = () => {
+const ProjectsSection = ({ content }: { content?: PortfolioContent }) => {
   return (
     <SectionWrapper id="projects" className="max-w-7xl mx-auto md:min-h-[130vh] px-4">
-      <SectionHeader id="projects" title="Projects" />
+      <SectionHeader id="projects" title={content?.projectsTitle || "Projects"} />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {projects.map((project) => (
+        {content?.projects?.length ? content.projects.map((project) => <ManagedProjectCard key={project.id} project={project} />) : projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
       </div>
     </SectionWrapper>
   );
 };
+
+const ManagedProjectCard = ({ project }: { project: ManagedProject }) => <article className="rounded-xl border border-primary/30 bg-card/80 p-5 shadow-lg"><p className="mb-3 font-mono text-xs uppercase tracking-[.18em] text-primary">{project.category}</p><h3 className="text-xl font-bold">{project.title}</h3><p className="mt-3 text-sm text-muted-foreground">{project.description}</p><div className="mt-5 flex gap-4 text-sm"><a href={project.githubUrl || "#"} className="text-primary">Source</a>{project.liveUrl && <a href={project.liveUrl} className="text-primary">Visit</a>}</div></article>;
 
 const ProjectCard = ({ project }: { project: Project }) => {
   return (

@@ -41,6 +41,11 @@ const links: Link[] = [
     href: '/#contact',
     thumbnail: '/assets/nav-link-previews/mahaan-contact.png'
   }
+  ,{
+    title: 'Admin',
+    href: '/admin',
+    thumbnail: '/assets/nav-link-previews/mahaan-contact.png'
+  }
 ];
 
 export { links };

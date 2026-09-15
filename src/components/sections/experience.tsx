@@ -6,9 +6,10 @@ import SectionWrapper from "../ui/section-wrapper";
 import { motion } from "motion/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Award, BookOpen, GraduationCap } from "lucide-react";
+import type { PortfolioContent } from "@/lib/portfolio-content";
 
-const ExperienceSection = () => {
-  const certificates = [
+const ExperienceSection = ({ content }: { content?: PortfolioContent }) => {
+  const defaultCertificates = [
     "Certified SOC Practitioner Fundamentals - CyberExam",
     "GRC Fundamentals and Certified GRC Practitioner - CyberExam",
     "ISO/IEC 27001:2022 Information Security Associate - SkillFront",
@@ -17,7 +18,7 @@ const ExperienceSection = () => {
     "TryHackMe Pre-Security Learning Path",
     "ISC2 Certified in Cybersecurity coursework - exam preparation in progress",
   ];
-  const topics = [
+  const defaultTopics = [
     "Networking, TCP/IP and DNS",
     "Windows and Linux fundamentals",
     "Log analysis and alert triage",
@@ -32,7 +33,7 @@ const ExperienceSection = () => {
       <div className="w-full max-w-6xl px-4 md:px-8 mx-auto">
         <SectionHeader
           id="experience"
-          title="What I Have Learned"
+          title={content?.learningTitle || "What I Have Learned"}
           desc="Education, certifications and practical study."
           className="static mb-12"
         />
@@ -43,11 +44,11 @@ const ExperienceSection = () => {
           </Card>
           <Card className="border-primary/20 bg-card/80 backdrop-blur-md">
             <CardHeader><Award className="text-primary"/><p className="font-mono text-xs uppercase tracking-[.2em] text-primary">Certifications &amp; Training</p></CardHeader>
-            <CardContent><ul className="space-y-3 text-sm text-muted-foreground">{certificates.map(item => <li key={item} className="flex gap-3"><span className="text-primary">•</span>{item}</li>)}</ul></CardContent>
+            <CardContent><ul className="space-y-3 text-sm text-muted-foreground">{(content?.certifications?.length ? content.certifications : defaultCertificates).map(item => <li key={item} className="flex gap-3"><span className="text-primary">•</span>{item}</li>)}</ul></CardContent>
           </Card>
           <Card className="border-primary/20 bg-card/80 backdrop-blur-md">
             <CardHeader><BookOpen className="text-primary"/><p className="font-mono text-xs uppercase tracking-[.2em] text-primary">Topics Studied</p></CardHeader>
-            <CardContent><ul className="space-y-3 text-sm text-muted-foreground">{topics.map(item => <li key={item} className="flex gap-3"><span className="text-primary">•</span>{item}</li>)}</ul></CardContent>
+            <CardContent><ul className="space-y-3 text-sm text-muted-foreground">{(content?.topics?.length ? content.topics : defaultTopics).map(item => <li key={item} className="flex gap-3"><span className="text-primary">•</span>{item}</li>)}</ul></CardContent>
           </Card>
         </div>
       </div>
