@@ -11,7 +11,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
     defaultTheme="dark"
     disableTransitionOnChange
   >
-    <Preloader>
+    <Preloader disabled>
       <SocketContextProvider>
         <TooltipProvider>
           {children}
