@@ -1,10 +1,9 @@
 "use client";
 import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./style.module.scss";
-import { opacity, background } from "./anim";
 import Nav from "./nav";
 import { cn } from "@/lib/utils";
 import FunnyThemeToggle from "../theme/funny-theme-toggle";
@@ -21,7 +20,7 @@ const Header = ({ loader }: HeaderProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const isHome = usePathname() === "/";
   return (
-    <motion.header
+    <header
       className={cn(
         styles.header,
         "transition-colors delay-100 duration-500 ease-in z-[1000]"
@@ -30,16 +29,6 @@ const Header = ({ loader }: HeaderProps) => {
         background: isActive ? "hsl(var(--background) / .8)" : "transparent",
         // backgroundImage:
         //   "linear-gradient(0deg, rgba(0, 0, 0, 0), rgb(0, 0, 0))",
-      }}
-      initial={{
-        y: -80,
-      }}
-      animate={{
-        y: 0,
-      }}
-      transition={{
-        delay: loader ? 3.5 : 0, // 3.5 for loading, .5 can be added for delay
-        duration: 0.8,
       }}
     >
       {/* <div
@@ -76,15 +65,7 @@ const Header = ({ loader }: HeaderProps) => {
           )}
         >
           <div className="relative hidden md:flex items-center">
-            <motion.p
-              variants={opacity}
-              animate={!isActive ? "open" : "closed"}
-            >
-              Menu
-            </motion.p>
-            <motion.p variants={opacity} animate={isActive ? "open" : "closed"}>
-              Close
-            </motion.p>
+            <p>{isActive ? "Close" : "Menu"}</p>
           </div>
           <div
             className={`${styles.burger} ${isActive ? styles.burgerActive : ""
@@ -92,17 +73,15 @@ const Header = ({ loader }: HeaderProps) => {
           ></div>
         </Button>
       </div>
-      <motion.div
-        variants={background}
-        initial="initial"
-        animate={isActive ? "open" : "closed"}
+      <div
         onClick={() => setIsActive(false)}
         className={styles.background}
-      ></motion.div>
+        style={{ height: isActive ? "100vh" : 0 }}
+      ></div>
       <AnimatePresence mode="wait">
         {isActive && <Nav setIsActive={setIsActive} />}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 };
 

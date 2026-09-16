@@ -1,9 +1,9 @@
 "use client";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Application, SPEObject, SplineEvent } from "@splinetool/runtime";
+import Spline from "@splinetool/react-spline";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-const Spline = React.lazy(() => import("@splinetool/react-spline"));
 import { Skill, SkillNames, SKILLS } from "@/data/constants";
 import { sleep } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -33,6 +33,17 @@ const KeyboardScene = ({ maxDpr }: { maxDpr: number }) => {
   const keycapAnimationsRef = useRef<{ start: () => void; stop: () => void }>(null);
 
   const [keyboardRevealed, setKeyboardRevealed] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
+
+  // The original Spline file remains the first choice. Some browsers block its
+  // WebGL/WASM boot sequence, however, which previously left the portfolio
+  // with no keyboard at all. Show an interactive visual fallback in that case.
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if (!keyboardRevealed) setShowFallback(true);
+    }, 3500);
+    return () => window.clearTimeout(timer);
+  }, [keyboardRevealed]);
 
   // --- Event Handlers ---
 
@@ -480,7 +491,7 @@ const KeyboardScene = ({ maxDpr }: { maxDpr: number }) => {
   }, [splineApp]);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <>
       <Spline
         className="w-full h-full fixed"
         ref={splineContainer}
@@ -490,9 +501,50 @@ const KeyboardScene = ({ maxDpr }: { maxDpr: number }) => {
         }}
         scene="/assets/skills-keyboard.spline"
       />
-    </Suspense>
+      {showFallback && !keyboardRevealed && <KeyboardFallback />}
+    </>
   );
 };
+
+const fallbackKeys = ["AI", "GPT", "N", "JS", "PY", "SEC", "DNS", "SOC", "LIN", "WEB", "GIT", "OS"];
+
+/** A local, dependency-free keyboard for browsers where Spline cannot start. */
+function KeyboardFallback() {
+  const [activeKey, setActiveKey] = useState<string | null>(null);
+
+  return (
+    <div className="pointer-events-none fixed right-[4vw] top-[16vh] z-30 hidden w-[min(43vw,610px)] -rotate-[15deg] [perspective:900px] sm:block">
+      <div className="rounded-[28px] bg-[#101413] p-5 shadow-[0_36px_0_#050706,0_48px_70px_rgba(0,0,0,.52)] ring-1 ring-white/10 [transform:rotateX(17deg)]">
+        <div className="mb-3 flex items-center gap-2 px-1">
+          <span className="h-2 w-2 rounded-full bg-emerald-400" />
+          <span className="h-2 w-2 rounded-full bg-white/30" />
+          <span className="ml-auto font-mono text-[9px] uppercase tracking-[.2em] text-emerald-300/70">interactive keyboard</span>
+        </div>
+        <div className="grid grid-cols-4 gap-3">
+          {fallbackKeys.map((key, index) => {
+            const palette = ["bg-cyan-500", "bg-emerald-500", "bg-blue-600", "bg-orange-500", "bg-violet-600", "bg-rose-600"][index % 6];
+            const pressed = activeKey === key;
+            return (
+              <button
+                key={key}
+                type="button"
+                aria-label={`${key} keyboard key`}
+                onPointerDown={() => setActiveKey(key)}
+                onPointerUp={() => setActiveKey(null)}
+                onPointerLeave={() => setActiveKey(null)}
+                className={`pointer-events-auto aspect-[1.05] rounded-xl ${palette} border border-white/30 text-sm font-black text-white shadow-[0_8px_0_rgba(0,0,0,.6)] transition duration-150 hover:-translate-y-1 hover:brightness-110 active:translate-y-2 active:shadow-none ${pressed ? "translate-y-2 shadow-none" : "animate-[keyboardFloat_3.6s_ease-in-out_infinite]"}`}
+                style={{ animationDelay: `${index * 110}ms` }}
+              >
+                {key}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <style jsx>{`@keyframes keyboardFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }`}</style>
+    </div>
+  );
+}
 
 /**
  * Gate the heavy WebGL scene behind device/preference detection.
@@ -509,8 +561,10 @@ const KeyboardScene = ({ maxDpr }: { maxDpr: number }) => {
  * splash when 3D is disabled.
  */
 const AnimatedBackground = () => {
-  const { disable3D, maxDpr, ready } = usePerfProfile();
-  if (!ready || disable3D) return null;
+  const { maxDpr, ready } = usePerfProfile();
+  // This portfolio is built around the keyboard. Keep it available unless the
+  // browser has not completed its initial client-side capability check yet.
+  if (!ready) return <KeyboardFallback />;
   return <KeyboardScene maxDpr={maxDpr} />;
 };
 
