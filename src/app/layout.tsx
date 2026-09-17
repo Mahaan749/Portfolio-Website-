@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Unbounded } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { config } from "@/data/config";
 
@@ -9,14 +9,16 @@ import { Providers } from "@/components/providers";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { UMAMI_SRC } from "@/lib/umami";
 
-const spaceGroteskSans = Space_Grotesk({
-  subsets: ["latin"],
+const spaceGroteskSans = localFont({
+  src: "./fonts/space-grotesk-latin.woff2",
+  weight: "300 700",
   variable: "--font-sans",
   display: "swap",
 });
 
-const unbounded = Unbounded({
-  subsets: ["latin"],
+const unbounded = localFont({
+  src: "./fonts/unbounded-latin.woff2",
+  weight: "200 900",
   variable: "--font-display",
   display: "swap",
 });
