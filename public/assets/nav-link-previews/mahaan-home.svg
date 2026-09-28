@@ -6,7 +6,7 @@
   <text x="100" y="230" fill="#aabbb4" font-family="Arial,sans-serif" font-size="28">Hi, I am</text>
   <text x="96" y="330" fill="#f5faf7" font-family="Arial,sans-serif" font-size="96" font-weight="800">Mahaan</text>
   <text x="96" y="432" fill="#f5faf7" font-family="Arial,sans-serif" font-size="96" font-weight="800">Shrestha</text>
-  <text x="100" y="486" fill="#aabbb4" font-family="Arial,sans-serif" font-size="28">Aspiring SOC Analyst · Defensive Security</text>
+  <text x="100" y="486" fill="#aabbb4" font-family="Arial,sans-serif" font-size="28">Cyber Security Student · Interested in GRC and Defensive Security</text>
   <rect x="100" y="530" width="210" height="62" rx="10" fill="#28d39d"/><text x="143" y="570" fill="#05130e" font-family="Arial,sans-serif" font-size="24" font-weight="700">View Resume</text>
   <g transform="translate(760 155) rotate(-12)"><rect width="330" height="270" rx="25" fill="#151c1a" stroke="#27332f" stroke-width="8"/><g fill="#28d39d"><rect x="45" y="45" width="58" height="52" rx="10"/><rect x="118" y="45" width="58" height="52" rx="10"/><rect x="191" y="45" width="58" height="52" rx="10"/><rect x="82" y="112" width="58" height="52" rx="10"/><rect x="155" y="112" width="58" height="52" rx="10"/></g><g fill="#1689d4"><rect x="45" y="179" width="58" height="52" rx="10"/><rect x="118" y="179" width="58" height="52" rx="10"/></g><rect x="191" y="179" width="58" height="52" rx="10" fill="#ff6542"/></g>
 </svg>

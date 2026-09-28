@@ -61,7 +61,7 @@ const HeroSection = () => {
                       "cursor-default sm:text-xl md:text-xl whitespace-nowrap bg-clip-text "
                     )}
                   >
-                    Aspiring SOC Analyst · Defensive Security
+                    Cyber Security Student · Interested in GRC and Defensive Security
                   </p>
                 </BlurIn>
               </div>
