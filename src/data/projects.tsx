@@ -773,64 +773,46 @@ const projects: Project[] = [
     },
   },
   {
-    id: "portfolio",
-    category: "Personal website",
-    title: "Portfolio Website",
-    src: "/assets/projects-screenshots/portfolio/landing.png",
-    screenshots: ["1.png"],
-    live: "http://nareshkhatri.vercel.app",
-    github: "https://github.com/Naresh-Khatri/Portfolio",
+    id: "blog",
+    category: "Security journal",
+    title: "Blog Section",
+    src: "/assets/projects-screenshots/blog/landing.png",
+    screenshots: ["landing.png"],
+    live: "/blogs",
     skills: {
       frontend: [
         PROJECT_SKILLS.ts,
         PROJECT_SKILLS.next,
+        PROJECT_SKILLS.react,
         PROJECT_SKILLS.tailwind,
         PROJECT_SKILLS.motion,
-        PROJECT_SKILLS.spline,
       ],
       backend: [],
     },
     get content() {
       return (
         <div>
-          <TypographyP className="font-mono ">
-            Welcome to my digital playground, where creativity meets code in the
-            dopest way possible.
+          <TypographyP className="font-mono text-2xl text-center">
+            Security logs, lab lessons, and the occasional technical side quest.
           </TypographyP>
-          <ProjectsLinks live={this.live} repo={this.github} />
-          <TypographyH3 className="my-4 mt-8">
-            Beautiful 3D Objects{" "}
-          </TypographyH3>
-          <p className="font-mono mb-2">
-            Did you see that 3D keyboard modal? Yeah! I made that. That
-            interactive keyboard is being rendered in 3D on a webpage 🤯, and
-            pressing each keycap reveals a skill in a goofy way. It&apos;s like
-            typing, but make it art.
-          </p>
-          <SlideShow
-            images={[
-              `${BASE_PATH}/portfolio/landing.png`,
-              `${BASE_PATH}/portfolio/skills.png`,
-            ]}
-          />
-          <TypographyH3 className="my-4 ">Space Theme</TypographyH3>
-          <p className="font-mono mb-2">
-            Dark background + floating particles = out-of-this-world cool.
-          </p>
-          <SlideShow images={[`${BASE_PATH}/portfolio/navbar.png`]} />
-          <TypographyH3 className="my-4 mt-8">Projects</TypographyH3>
+          <TypographyP className="font-mono">
+            A dedicated journal for documenting authorised labs, defensive-security
+            concepts, coursework, and useful mistakes. The goal is simple: record
+            what I tested, what happened, and what I should remember before DNS
+            somehow becomes involved again.
+          </TypographyP>
+          <ProjectsLinks live={this.live} />
 
+          <TypographyH3 className="my-4 mt-8">What lives here</TypographyH3>
           <p className="font-mono mb-2">
-            My top personal and freelance projects — no filler, all killer.
+            Practical write-ups on monitoring, networking, alert triage, web
+            security, and other topics I am learning. Sensitive details stay out;
+            useful lessons stay in.
           </p>
-          <SlideShow
-            images={[
-              `${BASE_PATH}/portfolio/projects.png`,
-              `${BASE_PATH}/portfolio/project.png`,
-            ]}
-          />
+          <SlideShow images={[`${BASE_PATH}/blog/landing.png`]} />
+
           <p className="font-mono mb-2 mt-8 text-center">
-            This site&apos;s not just a portfolio — it&apos;s a whole vibe.
+            Carefully documented so future me cannot claim nobody wrote it down.
           </p>
         </div>
       );
