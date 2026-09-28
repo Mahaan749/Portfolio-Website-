@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { CalendarDays, ArrowUpRight, Clock, ShieldCheck, Terminal } from "lucide-react";
+import { CalendarDays, ArrowUpRight, Clock } from "lucide-react";
 import { motion } from "motion/react";
 
 type Post = {
@@ -52,27 +52,9 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-20"
         >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="h-px flex-1 max-w-[60px] bg-[hsl(20,100%,70%)]" />
-            <span className="text-[hsl(20,100%,70%)] text-sm font-medium tracking-[0.2em] uppercase font-sans">
-              Lab journal
-            </span>
-          </div>
-          <h1 className="font-display text-3xl md:text-5xl leading-[0.95] tracking-tight">
-            Security logs &<br />
-            <span className="text-[hsl(20,100%,70%)]">side quests.</span>
+          <h1 className="font-display text-4xl md:text-6xl leading-[0.95] tracking-tight text-[hsl(20,100%,70%)]">
+            Blog Section
           </h1>
-          <p className="mt-6 text-muted-foreground text-lg max-w-lg leading-relaxed font-sans">
-            Lab write-ups, defensive-security lessons, and debugging stories with the panic edited out.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3 text-xs font-mono uppercase tracking-wider text-muted-foreground">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[hsl(20,100%,70%)]/20 bg-[hsl(20,100%,70%)]/5 px-3 py-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-[hsl(20,100%,70%)]" /> Authorised labs only
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-border/60 px-3 py-1.5">
-              <Terminal className="h-3.5 w-3.5" /> Notes may contain terminal output
-            </span>
-          </div>
         </motion.div>
 
         {/* Featured post */}

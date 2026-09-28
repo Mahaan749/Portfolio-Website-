@@ -776,8 +776,8 @@ const projects: Project[] = [
     id: "blog",
     category: "Security journal",
     title: "Blog Section",
-    src: "/assets/projects-screenshots/blog/landing.png",
-    screenshots: ["landing.png"],
+    src: "",
+    screenshots: [],
     live: "/blogs",
     skills: {
       frontend: [
@@ -809,8 +809,6 @@ const projects: Project[] = [
             security, and other topics I am learning. Sensitive details stay out;
             useful lessons stay in.
           </p>
-          <SlideShow images={[`${BASE_PATH}/blog/landing.png`]} />
-
           <p className="font-mono mb-2 mt-8 text-center">
             Carefully documented so future me cannot claim nobody wrote it down.
           </p>
