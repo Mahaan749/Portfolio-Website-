@@ -1,12 +1,13 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,8 +21,24 @@ export default function AdminLoginPage() {
     try {
       if (!isSupabaseConfigured()) throw new Error("The CMS has not been configured yet.");
       const supabase = createClient();
-      const { error: loginError } = await supabase.auth.signInWithPassword({ email, password });
+      const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({ email, password });
       if (loginError) throw loginError;
+
+      const { data: admin, error: roleError } = await supabase
+        .from("admin_users")
+        .select("user_id")
+        .eq("user_id", loginData.user.id)
+        .maybeSingle();
+
+      if (roleError) {
+        await supabase.auth.signOut();
+        throw new Error("The CMS database has not been initialized yet.");
+      }
+      if (!admin) {
+        await supabase.auth.signOut();
+        throw new Error("This account has not been approved as the portfolio admin.");
+      }
+
       router.replace("/admin");
       router.refresh();
     } catch (loginError) {
@@ -47,7 +64,11 @@ export default function AdminLoginPage() {
           Password
           <input required type="password" value={password} onChange={(event) => setPassword(event.target.value)} className="mt-2 w-full rounded-lg border border-border bg-background px-4 py-3" />
         </label>
-        {error && <p className="text-sm text-red-400" role="alert">{error}</p>}
+        {(error || searchParams.get("error") === "not-authorized") && (
+          <p className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300" role="alert">
+            {error || "This account is not authorized to manage the portfolio."}
+          </p>
+        )}
         <button disabled={loading} className="w-full rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-60">
           {loading ? "Signing in…" : "Sign in"}
         </button>
