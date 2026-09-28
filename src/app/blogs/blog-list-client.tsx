@@ -40,8 +40,8 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
     <div className="min-h-screen font-sans">
       {/* Decorative background */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[100px]" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-[hsl(20,100%,70%)]/5 blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[hsl(20,100%,70%)]/3 blur-[100px]" />
       </div>
 
       <div className="container mx-auto px-4 pt-32 pb-24 max-w-6xl">
@@ -53,21 +53,21 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
           className="mb-20"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="h-px flex-1 max-w-[60px] bg-primary" />
-            <span className="text-primary text-sm font-medium tracking-[0.2em] uppercase font-sans">
-              Field notes
+            <div className="h-px flex-1 max-w-[60px] bg-[hsl(20,100%,70%)]" />
+            <span className="text-[hsl(20,100%,70%)] text-sm font-medium tracking-[0.2em] uppercase font-sans">
+              Lab journal
             </span>
           </div>
           <h1 className="font-display text-3xl md:text-5xl leading-[0.95] tracking-tight">
-            Security notes,<br />
-            <span className="text-primary">minus the noise.</span>
+            Security logs &<br />
+            <span className="text-[hsl(20,100%,70%)]">side quests.</span>
           </h1>
           <p className="mt-6 text-muted-foreground text-lg max-w-lg leading-relaxed font-sans">
             Lab write-ups, defensive-security lessons, and debugging stories with the panic edited out.
           </p>
           <div className="mt-8 flex flex-wrap gap-3 text-xs font-mono uppercase tracking-wider text-muted-foreground">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-primary" /> Authorised labs only
+            <span className="inline-flex items-center gap-2 rounded-full border border-[hsl(20,100%,70%)]/20 bg-[hsl(20,100%,70%)]/5 px-3 py-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-[hsl(20,100%,70%)]" /> Authorised labs only
             </span>
             <span className="inline-flex items-center gap-2 rounded-full border border-border/60 px-3 py-1.5">
               <Terminal className="h-3.5 w-3.5" /> Notes may contain terminal output
@@ -84,14 +84,14 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
             className="mb-16"
           >
             <Link href={`/blogs/${featured.slug}`} className="group block">
-              <div className="relative border border-border/50 rounded-2xl p-8 md:p-12 overflow-hidden transition-colors hover:border-primary/40 bg-card/30 backdrop-blur-sm">
+              <div className="relative border border-border/50 rounded-2xl p-8 md:p-12 overflow-hidden transition-colors hover:border-[hsl(20,100%,70%)]/30 bg-card/30 backdrop-blur-sm">
                 {/* Corner accent */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[hsl(20,100%,70%)]/10 to-transparent rounded-bl-full" />
 
                 <div className="relative">
                   <div className="flex items-center gap-4 mb-6 text-sm text-muted-foreground font-sans">
-                    <span className="text-primary font-medium tracking-[0.15em] uppercase text-xs">
-                      Latest transmission
+                    <span className="text-[hsl(20,100%,70%)] font-medium tracking-[0.15em] uppercase text-xs">
+                      Newest entry
                     </span>
                     <span className="h-1 w-1 rounded-full bg-muted-foreground/50" />
                     <span className="flex items-center gap-1.5">
@@ -104,7 +104,7 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
                     </span>
                   </div>
 
-                  <h2 className="font-display text-2xl md:text-3xl leading-[1.15] mb-4 group-hover:text-primary transition-colors duration-300">
+                  <h2 className="font-display text-2xl md:text-3xl leading-[1.15] mb-4 group-hover:text-[hsl(20,100%,70%)] transition-colors duration-300">
                     {featured.metadata.title}
                   </h2>
 
@@ -118,14 +118,14 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
                         <Badge
                           key={tag}
                           variant="outline"
-                          className="border-primary/20 text-primary bg-primary/5 rounded-full px-3"
+                          className="border-[hsl(20,100%,70%)]/20 text-[hsl(20,100%,70%)] bg-[hsl(20,100%,70%)]/5 rounded-full px-3"
                         >
                           {tag}
                         </Badge>
                       ))}
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-primary transition-colors font-sans">
-                      Open field note
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-[hsl(20,100%,70%)] transition-colors font-sans">
+                      Read log
                       <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </div>
                   </div>
@@ -159,7 +159,7 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
               }}
             >
               <Link href={`/blogs/${post.slug}`} className="group block h-full">
-                <div className="h-full border border-border/50 rounded-xl p-6 md:p-8 transition-all duration-300 hover:border-primary/40 hover:bg-card/40 bg-card/20 backdrop-blur-sm">
+                <div className="h-full border border-border/50 rounded-xl p-6 md:p-8 transition-all duration-300 hover:border-[hsl(20,100%,70%)]/30 hover:bg-card/40 bg-card/20 backdrop-blur-sm">
                   <div className="flex items-center gap-3 mb-4 text-xs text-muted-foreground font-sans">
                     <span className="flex items-center gap-1.5">
                       <CalendarDays className="w-3 h-3" />
@@ -172,7 +172,7 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
                     </span>
                   </div>
 
-                  <h3 className="font-display text-lg md:text-xl leading-tight mb-3 group-hover:text-primary transition-colors duration-300">
+                  <h3 className="font-display text-lg md:text-xl leading-tight mb-3 group-hover:text-[hsl(20,100%,70%)] transition-colors duration-300">
                     {post.metadata.title}
                   </h3>
 
@@ -192,7 +192,7 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
                         </Badge>
                       ))}
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                    <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-[hsl(20,100%,70%)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
                 </div>
               </Link>
@@ -208,7 +208,7 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
             transition={{ delay: 0.3 }}
             className="text-center py-24"
           >
-            <p className="text-muted-foreground text-lg font-sans">No field notes yet. The evidence bag is currently empty.</p>
+            <p className="text-muted-foreground text-lg font-sans">No lab logs yet. The evidence bag is currently empty.</p>
           </motion.div>
         )}
       </div>
