@@ -162,6 +162,35 @@ These features activate automatically when the `NEXT_PUBLIC_WS_URL` environment 
 
 ## 🚀 Deployment
 
+### Run with Docker
+
+Docker runs the website on port **3003** and connects it to the existing hosted Supabase backend.
+
+1. Install and start [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+2. Keep `.env.local` in the project root with the public Supabase URL and publishable key. Never put a Supabase secret/service-role key in this file or the Docker image.
+3. From the project directory, build and start the site:
+
+   ```powershell
+   docker compose --env-file .env.local up --build -d
+   ```
+
+4. Open [http://localhost:3003](http://localhost:3003). The admin login remains at [http://localhost:3003/admin/login](http://localhost:3003/admin/login).
+
+Useful commands:
+
+```powershell
+# View application logs
+docker compose logs -f portfolio
+
+# Stop the website without deleting the image
+docker compose down
+
+# Rebuild after changing code
+docker compose --env-file .env.local up --build -d
+```
+
+Supabase remains hosted separately, so no local database container is required. Uploaded certificate and project images remain in Supabase Storage.
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Naresh-Khatri/3d-portfolio)
 
 This site is deployed on **Vercel**. To deploy your own:
