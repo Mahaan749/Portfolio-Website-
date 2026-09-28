@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
  * keyboard isn't there to convey the skills — so we render them as a real HTML
  * grid instead. Progressive enhancement: the content survives without WebGL.
  */
-const SkillsSection = () => {
+const SkillsSection = ({ title = "Tech Arsenal" }: { title?: string }) => {
   const { disable3D, ready } = usePerfProfile();
   const showGrid = ready && disable3D;
 
@@ -28,7 +28,7 @@ const SkillsSection = () => {
       >
         <SectionHeader
           id="skills"
-          title="Tech Arsenal"
+          title={title}
           desc="Linux · Networking · Web Security · Python"
           className="static mb-14"
         />
@@ -79,7 +79,7 @@ const SkillsSection = () => {
       id="skills"
       className="w-full h-screen md:h-[150dvh] pointer-events-none"
     >
-      <SectionHeader id="skills" title="Tech Arsenal" desc="(hint: press a key)" />
+      <SectionHeader id="skills" title={title} desc="(hint: press a key)" />
     </SectionWrapper>
   );
 };

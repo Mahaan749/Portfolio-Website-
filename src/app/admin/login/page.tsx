@@ -39,7 +39,7 @@ export default function AdminLoginPage() {
         throw new Error("This account has not been approved as the portfolio admin.");
       }
 
-      router.replace("/admin");
+      router.replace("/?admin=1");
       router.refresh();
     } catch (loginError) {
       setError(loginError instanceof Error ? loginError.message : "Unable to sign in.");

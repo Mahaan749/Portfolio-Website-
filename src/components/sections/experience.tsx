@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Award, BookOpen, GraduationCap } from "lucide-react";
 
-const ExperienceSection = () => {
+const ExperienceSection = ({ title = "What I Have Learned", description = "Education, certifications and practical study." }: { title?: string; description?: string }) => {
   const certificates = [
     "Certified SOC Practitioner Fundamentals - CyberExam",
     "GRC Fundamentals and Certified GRC Practitioner - CyberExam",
@@ -32,8 +32,8 @@ const ExperienceSection = () => {
       <div className="w-full max-w-6xl px-4 md:px-8 mx-auto">
         <SectionHeader
           id="experience"
-          title="What I Have Learned"
-          desc="Education, certifications and practical study."
+          title={title}
+          desc={description}
           className="static mb-12"
         />
         <div className="grid gap-4 md:grid-cols-2">

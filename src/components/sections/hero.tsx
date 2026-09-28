@@ -11,7 +11,7 @@ import { config } from "@/data/config";
 
 import SectionWrapper from "../ui/section-wrapper";
 
-const HeroSection = () => {
+const HeroSection = ({ intro = "Hi, I am", author = config.author, subtitle = "Cyber Security Student · Interested in GRC and Defensive Security" }: { intro?: string; author?: string; subtitle?: string }) => {
   const { isLoading } = usePreloader();
 
   return (
@@ -35,7 +35,7 @@ const HeroSection = () => {
                       "cursor-default sm:text-xl md:text-xl whitespace-nowrap bg-clip-text "
                     )}
                   >
-                    Hi, I am
+                    {intro}
                     <br className="md:hidden" />
                   </p>
                 </BlurIn>
@@ -48,9 +48,9 @@ const HeroSection = () => {
                       "cursor-default text-edge-outline font-display "
                     )}
                   >
-                    {config.author.split(" ")[0]}
+                    {author.split(" ")[0]}
                     <br className="md:block hiidden" />
-                    {config.author.split(" ")[1]}
+                    {author.split(" ").slice(1).join(" ")}
                   </h1>
                 </BlurIn>
                 {/* <div className="md:block hidden bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0 w-screen h-px animate-fade-right animate-glow" /> */}
@@ -61,7 +61,7 @@ const HeroSection = () => {
                       "cursor-default sm:text-xl md:text-xl whitespace-nowrap bg-clip-text "
                     )}
                   >
-                    Cyber Security Student · Interested in GRC and Defensive Security
+                    {subtitle}
                   </p>
                 </BlurIn>
               </div>

@@ -26,3 +26,15 @@ export type CmsPost = {
   created_at: string;
   updated_at: string;
 };
+
+export type HomeSettings = {
+  id?: string;
+  author: string;
+  heroIntro: string;
+  heroSubtitle: string;
+  skillsTitle: string;
+  experienceTitle: string;
+  experienceDescription: string;
+  projectsTitle: string;
+  contactTitle: string;
+};

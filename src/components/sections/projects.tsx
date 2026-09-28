@@ -18,8 +18,9 @@ import SectionWrapper from "../ui/section-wrapper";
 import ScrollingPreview from "../scrolling-preview";
 import type { CmsProject } from "@/lib/cms/types";
 import { TypographyP } from "../ui/typography";
+import InlineProjectEditor from "../admin/inline-project-editor";
 
-const ProjectsSection = ({ managedProjects = [] }: { managedProjects?: CmsProject[] }) => {
+const ProjectsSection = ({ managedProjects = [], title = "Projects", isAdmin = false }: { managedProjects?: CmsProject[]; title?: string; isAdmin?: boolean }) => {
   const cmsProjects: Project[] = managedProjects.map((project) => ({
     id: project.id,
     title: project.title,
@@ -35,19 +36,23 @@ const ProjectsSection = ({ managedProjects = [] }: { managedProjects?: CmsProjec
 
   return (
     <SectionWrapper id="projects" className="max-w-7xl mx-auto md:min-h-[130vh] px-4">
-      <SectionHeader id="projects" title="Projects" />
+      <div className="relative">
+        <SectionHeader id="projects" title={title} />
+        {isAdmin && <div className="pointer-events-auto absolute right-0 top-0 z-40"><InlineProjectEditor /></div>}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {allProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+          <ProjectCard key={project.id} project={project} managedProject={managedProjects.find(item => item.id === project.id)} isAdmin={isAdmin} />
         ))}
       </div>
     </SectionWrapper>
   );
 };
 
-const ProjectCard = ({ project }: { project: Project }) => {
+const ProjectCard = ({ project, managedProject, isAdmin }: { project: Project; managedProject?: CmsProject; isAdmin?: boolean }) => {
   return (
-    <div className="flex items-center justify-center">
+    <div className="relative flex items-center justify-center">
+      {isAdmin && managedProject && <div className="pointer-events-auto absolute right-2 top-2 z-40"><InlineProjectEditor project={managedProject} /></div>}
       <ResponsiveDialog>
         <ResponsiveDialogTrigger className="bg-transparent flex justify-center w-full">
           <div
