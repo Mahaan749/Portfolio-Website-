@@ -10,7 +10,6 @@ import { ScrollArea } from "../ui/scroll-area";
 import Link from "next/link";
 import { ArrowUpRight, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import type { HomeSettings } from "@/lib/cms/types";
 import { motion } from "motion/react";
 
@@ -57,11 +56,9 @@ const ProjectCard = ({ project, managedProject, isAdmin, settings }: { project: 
   async function hideBuiltInProject(event: React.MouseEvent) {
     event.preventDefault(); event.stopPropagation();
     if (!window.confirm(`Remove “${project.title}” from the website?`)) return;
-    const supabase = createClient();
-    const { id, author, hiddenProjectIds, ...content } = settings;
-    const next = [...hiddenProjectIds, project.id];
-    const payload = { title: author, category: "__site_settings__", summary: JSON.stringify({...content,hiddenProjectIds:next}), image_url: null, live_url: null, github_url: null, sort_order: -999, published: true };
-    if (id) await supabase.from("projects").update(payload).eq("id", id); else await supabase.from("projects").insert(payload);
+    const response = await fetch("/api/admin/content", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "hide-project", id: project.id }) });
+    const result = await response.json();
+    if (!response.ok) return window.alert(result.error || "Unable to delete project.");
     router.refresh();
   }
   return (

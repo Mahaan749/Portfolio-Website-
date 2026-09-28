@@ -15,19 +15,26 @@ export default function PageContentToolbar({ settings, category, pageName }: { s
   const [message, setMessage] = useState("");
   const input = "mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm";
 
-  async function save() {
+  async function save(nextForm: PageSettings = form, closeAfter = true) {
     setBusy(true); setMessage("");
-    const { id, title, ...content } = form;
+    const { id, title, ...content } = nextForm;
     const payload = { title, category, summary: JSON.stringify(content), image_url: null, live_url: null, github_url: null, sort_order: -998, published: true };
     const supabase = createClient();
     const { error } = id ? await supabase.from("projects").update(payload).eq("id", id) : await supabase.from("projects").insert(payload);
     setBusy(false);
     if (error) return setMessage(error.message);
-    setMessage("Page content updated."); router.refresh(); window.setTimeout(() => setOpen(false), 500);
+    setMessage("Page content updated."); router.refresh();
+    if (closeAfter) window.setTimeout(() => setOpen(false), 500);
   }
 
   async function logout() { await createClient().auth.signOut(); router.replace("/"); router.refresh(); }
   function addSection() { setForm({ ...form, sections: [...form.sections, { id: crypto.randomUUID(), title: "New section", body: "Add your text here." }] }); }
+  async function removeSection(sectionId: string) {
+    if (!window.confirm("Delete this section?")) return;
+    const nextForm = { ...form, sections: form.sections.filter(item => item.id !== sectionId) };
+    setForm(nextForm);
+    await save(nextForm, false);
+  }
 
   return <>
     <div className="fixed left-1/2 top-4 z-[2000] flex -translate-x-1/2 items-center gap-2 rounded-full border border-primary/30 bg-background/95 p-2 shadow-2xl backdrop-blur">
@@ -47,12 +54,12 @@ export default function PageContentToolbar({ settings, category, pageName }: { s
         </div>
         <div className="my-6 flex items-center justify-between"><h3 className="font-semibold">Additional sections</h3><button onClick={addSection} className="flex items-center gap-2 rounded-full border border-primary/40 px-3 py-2 text-sm text-primary"><Plus className="size-4"/> Add section</button></div>
         <div className="space-y-4">{form.sections.map((section,index) => <div key={section.id} className="rounded-xl border border-border p-4">
-          <div className="mb-3 flex justify-between"><span className="text-xs uppercase tracking-widest text-muted-foreground">Section {index + 1}</span><button onClick={() => setForm({...form,sections:form.sections.filter(item => item.id !== section.id)})} className="flex items-center gap-1 text-xs text-red-400" aria-label="Remove section"><Trash2 className="size-4"/> Delete section</button></div>
+          <div className="mb-3 flex justify-between"><span className="text-xs uppercase tracking-widest text-muted-foreground">Section {index + 1}</span><button disabled={busy} onClick={() => removeSection(section.id)} className="flex items-center gap-1 text-xs text-red-400 disabled:opacity-50" aria-label="Remove section"><Trash2 className="size-4"/> Delete section</button></div>
           <input className={input} value={section.title} onChange={e => setForm({...form,sections:form.sections.map(item => item.id === section.id ? {...item,title:e.target.value} : item)})}/>
           <textarea className={`${input} min-h-28`} value={section.body} onChange={e => setForm({...form,sections:form.sections.map(item => item.id === section.id ? {...item,body:e.target.value} : item)})}/>
         </div>)}</div>
         {message && <p className="mt-4 text-sm text-primary">{message}</p>}
-        <button disabled={busy} onClick={save} className="mt-5 w-full rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-50">{busy ? "Saving…" : "Save changes"}</button>
+        <button disabled={busy} onClick={() => save()} className="mt-5 w-full rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-50">{busy ? "Saving…" : "Save changes"}</button>
       </div>
     </div>}
   </>;

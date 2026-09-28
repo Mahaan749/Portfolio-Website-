@@ -39,9 +39,10 @@ export default function InlineProjectEditor({ project }: { project?: CmsProject 
   async function remove() {
     if (!project || !window.confirm(`Delete “${project.title}” permanently?`)) return;
     setBusy(true); setError("");
-    const { error: deleteError } = await createClient().from("projects").delete().eq("id", project.id);
+    const response = await fetch("/api/admin/content", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "delete-project", id: project.id }) });
+    const result = await response.json();
     setBusy(false);
-    if (deleteError) return setError(deleteError.message);
+    if (!response.ok) return setError(result.error || "Unable to delete project.");
     setOpen(false); router.refresh();
   }
 

@@ -7,7 +7,6 @@ import { CalendarDays, ArrowUpRight, Clock, Trash2 } from "lucide-react";
 import { motion } from "motion/react";
 import type { PageSettings } from "@/lib/cms/types";
 import PageContentToolbar from "@/components/admin/page-content-toolbar";
-import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 type Post = {
@@ -44,16 +43,9 @@ export default function BlogListClient({ posts, settings, isAdmin }: { posts: Po
 
   async function removePost(post: Post) {
     if (!window.confirm(`Delete “${post.metadata.title}” from the blog?`)) return;
-    const supabase = createClient();
-    if (post.cmsId) {
-      const { error } = await supabase.from("posts").delete().eq("id", post.cmsId);
-      if (error) return window.alert(error.message);
-    } else {
-      const { id, title, hiddenPostSlugs = [], ...content } = settings;
-      const payload = { title, category: "__blog_settings__", summary: JSON.stringify({...content,hiddenPostSlugs:[...hiddenPostSlugs,post.slug]}), image_url: null, live_url: null, github_url: null, sort_order: -998, published: true };
-      const { error } = id ? await supabase.from("projects").update(payload).eq("id", id) : await supabase.from("projects").insert(payload);
-      if (error) return window.alert(error.message);
-    }
+    const response = await fetch("/api/admin/content", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(post.cmsId ? { action: "delete-post", id: post.cmsId } : { action: "hide-post", slug: post.slug }) });
+    const result = await response.json();
+    if (!response.ok) return window.alert(result.error || "Unable to delete blog post.");
     router.refresh();
   }
 
