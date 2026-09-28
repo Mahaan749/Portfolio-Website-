@@ -11,8 +11,9 @@ import ContactSection from "@/components/sections/contact";
 import HeroSection from "@/components/sections/hero";
 import type { CmsProject, HomeSettings } from "@/lib/cms/types";
 import AdminToolbar from "@/components/admin/admin-toolbar";
+import CertificatesSection from "@/components/sections/certificates";
 
-export default function HomeClient({ projects, settings, isAdmin }: { projects: CmsProject[]; settings: HomeSettings; isAdmin: boolean }) {
+export default function HomeClient({ projects, certificates, settings, isAdmin }: { projects: CmsProject[]; certificates: CmsProject[]; settings: HomeSettings; isAdmin: boolean }) {
   return (
     <SmoothScroll>
       {isAdmin && <AdminToolbar settings={settings} />}
@@ -21,6 +22,7 @@ export default function HomeClient({ projects, settings, isAdmin }: { projects: 
         <HeroSection intro={settings.heroIntro} author={settings.author} subtitle={settings.heroSubtitle} />
         <SkillsSection title={settings.skillsTitle} />
         <ExperienceSection settings={settings} isAdmin={isAdmin} />
+        <CertificatesSection certificates={certificates} title={settings.certificatesGalleryTitle} isAdmin={isAdmin} />
         <ProjectsSection managedProjects={projects} title={settings.projectsTitle} isAdmin={isAdmin} settings={settings} />
         <ContactSection title={settings.contactTitle} />
       </main>

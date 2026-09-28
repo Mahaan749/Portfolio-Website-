@@ -16,6 +16,7 @@ export const defaultHomeSettings: HomeSettings = {
   educationPeriod: "2024 - Present · Fourth Semester",
   certificationsTitle: "Certifications & Training",
   certifications: ["Certified SOC Practitioner Fundamentals - CyberExam", "GRC Fundamentals and Certified GRC Practitioner - CyberExam", "ISO/IEC 27001:2022 Information Security Associate - SkillFront", "Foundations of Log Analysis for Cyber Defense - Red Team Leaders", "Certified LLM Security Professional - Red Team Leaders", "TryHackMe Pre-Security Learning Path", "ISC2 Certified in Cybersecurity coursework - exam preparation in progress"],
+  certificatesGalleryTitle: "Certifications",
   topicsTitle: "Topics Studied",
   topics: ["Networking, TCP/IP and DNS", "Windows and Linux fundamentals", "Log analysis and alert triage", "Web security and authorised testing", "Incident documentation and evidence collection", "MITRE ATT&CK awareness", "ISO 27001, risk and policy fundamentals", "Python and Git fundamentals"],
   hiddenProjectIds: [],
@@ -46,6 +47,19 @@ export async function getPublishedProjects(): Promise<CmsProject[]> {
     return (data ?? []) as CmsProject[];
   } catch (error) {
     console.error("Unable to load managed projects", error);
+    return [];
+  }
+}
+
+export async function getPublishedCertificates(): Promise<CmsProject[]> {
+  const supabase = getPublicClient();
+  if (!supabase) return [];
+  try {
+    const { data, error } = await supabase.from("projects").select("*").eq("category", "__certificate__").eq("published", true).order("sort_order", { ascending: true });
+    if (error) throw error;
+    return (data ?? []) as CmsProject[];
+  } catch (error) {
+    console.error("Unable to load certificates", error);
     return [];
   }
 }

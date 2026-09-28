@@ -43,6 +43,7 @@ export type HomeSettings = {
   educationPeriod: string;
   certificationsTitle: string;
   certifications: string[];
+  certificatesGalleryTitle: string;
   topicsTitle: string;
   topics: string[];
   hiddenProjectIds: string[];
