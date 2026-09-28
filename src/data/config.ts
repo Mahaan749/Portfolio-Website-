@@ -35,7 +35,6 @@ const config = {
     return this.site + "/assets/seo/og-image.png";
   },
   social: {
-    twitter: "#",
     linkedin: "https://www.linkedin.com/in/mahaan-shrestha/",
     instagram: "#",
     facebook: "#",

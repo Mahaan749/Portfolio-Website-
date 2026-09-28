@@ -3,8 +3,8 @@ import { getBlogPosts } from "@/lib/mdx";
 import BlogListClient from "./blog-list-client";
 
 export const metadata = {
-  title: "Blog | Portfolio",
-  description: "Thoughts, tutorials, and updates.",
+  title: "Security Notes | Mahaan Shrestha",
+  description: "Cybersecurity lab notes, lessons learned, and the occasional debugging detour.",
 };
 
 export default function BlogPage() {
