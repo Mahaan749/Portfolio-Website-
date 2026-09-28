@@ -4,7 +4,7 @@ export const useThrottle = <T extends (...args: any[]) => void>(
   func: T,
   limit: number
 ): T => {
-  const lastFunc = useRef<ReturnType<typeof setTimeout>>(null);
+  const lastFunc = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastRan = useRef<number>(0);
 
   return useCallback(

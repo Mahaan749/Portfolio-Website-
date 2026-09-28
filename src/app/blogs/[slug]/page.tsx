@@ -6,6 +6,10 @@ import Link from "next/link";
 import { ArrowLeft, CalendarDays, Clock, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import RevealAnimation from "@/components/reveal-animations";
+import { getPublishedPost } from "@/lib/cms/queries";
+import { notFound } from "next/navigation";
+import fs from "fs";
+import path from "path";
 
 export async function generateStaticParams() {
   const posts = getBlogPosts();
@@ -16,7 +20,10 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const managedPost = await getPublishedPost(slug);
+  const post = managedPost
+    ? { metadata: { title: managedPost.title, summary: managedPost.summary } }
+    : getBlogPost(slug);
   return {
     title: `${post.metadata.title} | Portfolio`,
     description: post.metadata.summary,
@@ -112,7 +119,22 @@ const components = {
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const managedPost = await getPublishedPost(slug);
+  const localPath = path.join(process.cwd(), "src/content/blogs", `${slug}.mdx`);
+  if (!managedPost && !fs.existsSync(localPath)) notFound();
+  const post = managedPost
+    ? {
+        metadata: {
+          title: managedPost.title,
+          summary: managedPost.summary,
+          publishedAt: managedPost.published_at,
+          image: managedPost.image_url ?? undefined,
+          author: managedPost.author,
+          tags: managedPost.tags,
+        },
+        content: managedPost.body,
+      }
+    : getBlogPost(slug);
   const readTime = estimateReadTime(post.content);
 
   return (
@@ -139,6 +161,9 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         {/* Article header */}
         <RevealAnimation delay={0.1}>
           <header className="mb-12">
+            {post.metadata.image && (
+              <img src={post.metadata.image} alt="" className="mb-10 max-h-[420px] w-full rounded-2xl object-cover" />
+            )}
             {/* Tags */}
             <div className="flex gap-2 mb-6 flex-wrap">
               {post.metadata.tags?.map((tag) => (

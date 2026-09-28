@@ -71,6 +71,9 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[hsl(20,100%,70%)]/10 to-transparent rounded-bl-full" />
 
                 <div className="relative">
+                  {featured.metadata.image && (
+                    <img src={featured.metadata.image} alt="" className="mb-8 h-64 w-full rounded-xl object-cover" />
+                  )}
                   <div className="flex items-center gap-4 mb-6 text-sm text-muted-foreground font-sans">
                     <span className="text-[hsl(20,100%,70%)] font-medium tracking-[0.15em] uppercase text-xs">
                       Newest entry
@@ -142,6 +145,9 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
             >
               <Link href={`/blogs/${post.slug}`} className="group block h-full">
                 <div className="h-full border border-border/50 rounded-xl p-6 md:p-8 transition-all duration-300 hover:border-[hsl(20,100%,70%)]/30 hover:bg-card/40 bg-card/20 backdrop-blur-sm">
+                  {post.metadata.image && (
+                    <img src={post.metadata.image} alt="" className="mb-5 h-40 w-full rounded-lg object-cover" />
+                  )}
                   <div className="flex items-center gap-3 mb-4 text-xs text-muted-foreground font-sans">
                     <span className="flex items-center gap-1.5">
                       <CalendarDays className="w-3 h-3" />

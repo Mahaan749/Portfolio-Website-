@@ -46,7 +46,7 @@ function Preloader({ children, disabled = false }: PreloaderProps) {
 
   const [isLoading, setIsLoading] = useState(!skip);
   const [loadingPercent, setLoadingPercent] = useState(skip ? 100 : 0);
-  const loadingTween = useRef<gsap.core.Tween>(null);
+  const loadingTween = useRef<gsap.core.Tween | null>(null);
 
   // The splash exists only to mask the Spline 3D scene loading. On low-end /
   // reduced-motion devices that scene is never loaded, so its onLoad (which

@@ -29,8 +29,8 @@ const KeyboardScene = ({ maxDpr }: { maxDpr: number }) => {
   const [activeSection, setActiveSection] = useState<Section>("hero");
 
   // Animation controllers refs
-  const bongoAnimationRef = useRef<{ start: () => void; stop: () => void }>(null);
-  const keycapAnimationsRef = useRef<{ start: () => void; stop: () => void }>(null);
+  const bongoAnimationRef = useRef<{ start: () => void; stop: () => void } | null>(null);
+  const keycapAnimationsRef = useRef<{ start: () => void; stop: () => void } | null>(null);
 
   const [keyboardRevealed, setKeyboardRevealed] = useState(false);
 

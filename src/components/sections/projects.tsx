@@ -16,13 +16,28 @@ import { SectionHeader } from "./section-header";
 
 import SectionWrapper from "../ui/section-wrapper";
 import ScrollingPreview from "../scrolling-preview";
+import type { CmsProject } from "@/lib/cms/types";
+import { TypographyP } from "../ui/typography";
 
-const ProjectsSection = () => {
+const ProjectsSection = ({ managedProjects = [] }: { managedProjects?: CmsProject[] }) => {
+  const cmsProjects: Project[] = managedProjects.map((project) => ({
+    id: project.id,
+    title: project.title,
+    category: project.category,
+    src: project.image_url ?? "",
+    screenshots: [],
+    skills: { frontend: [], backend: [] },
+    live: project.live_url ?? "",
+    github: project.github_url ?? undefined,
+    content: <TypographyP className="font-sans text-lg whitespace-pre-wrap">{project.summary}</TypographyP>,
+  }));
+  const allProjects = [...cmsProjects, ...projects];
+
   return (
     <SectionWrapper id="projects" className="max-w-7xl mx-auto md:min-h-[130vh] px-4">
       <SectionHeader id="projects" title="Projects" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {projects.map((project) => (
+        {allProjects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
       </div>
