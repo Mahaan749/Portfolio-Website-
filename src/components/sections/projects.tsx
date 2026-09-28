@@ -8,7 +8,10 @@ import {
 import { FloatingDock } from "../ui/floating-dock";
 import { ScrollArea } from "../ui/scroll-area";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import type { HomeSettings } from "@/lib/cms/types";
 import { motion } from "motion/react";
 
 import projects, { Project } from "@/data/projects";
@@ -20,7 +23,7 @@ import type { CmsProject } from "@/lib/cms/types";
 import { TypographyP } from "../ui/typography";
 import InlineProjectEditor from "../admin/inline-project-editor";
 
-const ProjectsSection = ({ managedProjects = [], title = "Projects", isAdmin = false }: { managedProjects?: CmsProject[]; title?: string; isAdmin?: boolean }) => {
+const ProjectsSection = ({ managedProjects = [], title = "Projects", isAdmin = false, settings }: { managedProjects?: CmsProject[]; title?: string; isAdmin?: boolean; settings: HomeSettings }) => {
   const cmsProjects: Project[] = managedProjects.map((project) => ({
     id: project.id,
     title: project.title,
@@ -32,7 +35,7 @@ const ProjectsSection = ({ managedProjects = [], title = "Projects", isAdmin = f
     github: project.github_url ?? undefined,
     content: <TypographyP className="font-sans text-lg whitespace-pre-wrap">{project.summary}</TypographyP>,
   }));
-  const allProjects = [...cmsProjects, ...projects];
+  const allProjects = [...cmsProjects, ...projects.filter(project => !settings.hiddenProjectIds.includes(project.id))];
 
   return (
     <SectionWrapper id="projects" className="max-w-7xl mx-auto md:min-h-[130vh] px-4">
@@ -42,17 +45,29 @@ const ProjectsSection = ({ managedProjects = [], title = "Projects", isAdmin = f
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {allProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} managedProject={managedProjects.find(item => item.id === project.id)} isAdmin={isAdmin} />
+          <ProjectCard key={project.id} project={project} managedProject={managedProjects.find(item => item.id === project.id)} isAdmin={isAdmin} settings={settings} />
         ))}
       </div>
     </SectionWrapper>
   );
 };
 
-const ProjectCard = ({ project, managedProject, isAdmin }: { project: Project; managedProject?: CmsProject; isAdmin?: boolean }) => {
+const ProjectCard = ({ project, managedProject, isAdmin, settings }: { project: Project; managedProject?: CmsProject; isAdmin?: boolean; settings: HomeSettings }) => {
+  const router = useRouter();
+  async function hideBuiltInProject(event: React.MouseEvent) {
+    event.preventDefault(); event.stopPropagation();
+    if (!window.confirm(`Remove “${project.title}” from the website?`)) return;
+    const supabase = createClient();
+    const { id, author, hiddenProjectIds, ...content } = settings;
+    const next = [...hiddenProjectIds, project.id];
+    const payload = { title: author, category: "__site_settings__", summary: JSON.stringify({...content,hiddenProjectIds:next}), image_url: null, live_url: null, github_url: null, sort_order: -999, published: true };
+    if (id) await supabase.from("projects").update(payload).eq("id", id); else await supabase.from("projects").insert(payload);
+    router.refresh();
+  }
   return (
     <div className="relative flex items-center justify-center">
       {isAdmin && managedProject && <div className="pointer-events-auto absolute right-2 top-2 z-40"><InlineProjectEditor project={managedProject} /></div>}
+      {isAdmin && !managedProject && <button onClick={hideBuiltInProject} className="pointer-events-auto absolute right-2 top-2 z-40 flex items-center gap-1 rounded-full border border-red-500/50 bg-background/95 px-3 py-2 text-xs font-semibold text-red-400 shadow-lg"><Trash2 className="size-3.5"/> Delete</button>}
       <ResponsiveDialog>
         <ResponsiveDialogTrigger className="bg-transparent flex justify-center w-full">
           <div

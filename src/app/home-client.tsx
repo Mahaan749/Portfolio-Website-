@@ -21,7 +21,7 @@ export default function HomeClient({ projects, settings, isAdmin }: { projects: 
         <HeroSection intro={settings.heroIntro} author={settings.author} subtitle={settings.heroSubtitle} />
         <SkillsSection title={settings.skillsTitle} />
         <ExperienceSection settings={settings} isAdmin={isAdmin} />
-        <ProjectsSection managedProjects={projects} title={settings.projectsTitle} isAdmin={isAdmin} />
+        <ProjectsSection managedProjects={projects} title={settings.projectsTitle} isAdmin={isAdmin} settings={settings} />
         <ContactSection title={settings.contactTitle} />
       </main>
     </SmoothScroll>

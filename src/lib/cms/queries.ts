@@ -18,9 +18,10 @@ export const defaultHomeSettings: HomeSettings = {
   certifications: ["Certified SOC Practitioner Fundamentals - CyberExam", "GRC Fundamentals and Certified GRC Practitioner - CyberExam", "ISO/IEC 27001:2022 Information Security Associate - SkillFront", "Foundations of Log Analysis for Cyber Defense - Red Team Leaders", "Certified LLM Security Professional - Red Team Leaders", "TryHackMe Pre-Security Learning Path", "ISC2 Certified in Cybersecurity coursework - exam preparation in progress"],
   topicsTitle: "Topics Studied",
   topics: ["Networking, TCP/IP and DNS", "Windows and Linux fundamentals", "Log analysis and alert triage", "Web security and authorised testing", "Incident documentation and evidence collection", "MITRE ATT&CK awareness", "ISO 27001, risk and policy fundamentals", "Python and Git fundamentals"],
+  hiddenProjectIds: [],
 };
 
-export const defaultBlogSettings: PageSettings = { eyebrow: "Lab journal", title: "Blog Section", description: "Security notes, lessons learned, and debugging stories with the panic edited out.", sections: [] };
+export const defaultBlogSettings: PageSettings = { eyebrow: "Lab journal", title: "Blog Section", description: "Security notes, lessons learned, and debugging stories with the panic edited out.", sections: [], hiddenPostSlugs: [] };
 export const defaultNewsletterSettings: PageSettings = { eyebrow: "Newsletter", title: "Field notes, minus the noise.", description: "Short updates about cybersecurity labs, defensive techniques and what I am learning. The mailing list is being prepared.", ctaLabel: "Ask me for updates", sections: [] };
 
 function getPublicClient() {

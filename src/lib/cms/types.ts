@@ -45,6 +45,7 @@ export type HomeSettings = {
   certifications: string[];
   topicsTitle: string;
   topics: string[];
+  hiddenProjectIds: string[];
 };
 
 export type CustomSection = { id: string; title: string; body: string };
@@ -56,4 +57,5 @@ export type PageSettings = {
   description: string;
   ctaLabel?: string;
   sections: CustomSection[];
+  hiddenPostSlugs?: string[];
 };

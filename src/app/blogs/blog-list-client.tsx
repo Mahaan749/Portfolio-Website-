@@ -3,12 +3,15 @@
 import React from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { CalendarDays, ArrowUpRight, Clock } from "lucide-react";
+import { CalendarDays, ArrowUpRight, Clock, Trash2 } from "lucide-react";
 import { motion } from "motion/react";
 import type { PageSettings } from "@/lib/cms/types";
 import PageContentToolbar from "@/components/admin/page-content-toolbar";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 type Post = {
+  cmsId?: string;
   slug: string;
   metadata: {
     title: string;
@@ -35,8 +38,24 @@ function formatDate(dateStr: string) {
 }
 
 export default function BlogListClient({ posts, settings, isAdmin }: { posts: Post[]; settings: PageSettings; isAdmin: boolean }) {
+  const router = useRouter();
   const featured = posts[0];
   const rest = posts.slice(1);
+
+  async function removePost(post: Post) {
+    if (!window.confirm(`Delete “${post.metadata.title}” from the blog?`)) return;
+    const supabase = createClient();
+    if (post.cmsId) {
+      const { error } = await supabase.from("posts").delete().eq("id", post.cmsId);
+      if (error) return window.alert(error.message);
+    } else {
+      const { id, title, hiddenPostSlugs = [], ...content } = settings;
+      const payload = { title, category: "__blog_settings__", summary: JSON.stringify({...content,hiddenPostSlugs:[...hiddenPostSlugs,post.slug]}), image_url: null, live_url: null, github_url: null, sort_order: -998, published: true };
+      const { error } = id ? await supabase.from("projects").update(payload).eq("id", id) : await supabase.from("projects").insert(payload);
+      if (error) return window.alert(error.message);
+    }
+    router.refresh();
+  }
 
   return (
     <div className="min-h-screen font-sans">
@@ -70,6 +89,7 @@ export default function BlogListClient({ posts, settings, isAdmin }: { posts: Po
             transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
             className="mb-16"
           >
+            <div className="relative">{isAdmin && <button onClick={() => removePost(featured)} className="absolute right-4 top-4 z-30 flex items-center gap-2 rounded-full border border-red-500/50 bg-background/95 px-3 py-2 text-xs font-semibold text-red-400"><Trash2 className="size-3.5"/> Delete post</button>}
             <Link href={`/blogs/${featured.slug}`} className="group block">
               <div className="relative border border-border/50 rounded-2xl p-8 md:p-12 overflow-hidden transition-colors hover:border-[hsl(20,100%,70%)]/30 bg-card/30 backdrop-blur-sm">
                 {/* Corner accent */}
@@ -121,7 +141,7 @@ export default function BlogListClient({ posts, settings, isAdmin }: { posts: Po
                   </div>
                 </div>
               </div>
-            </Link>
+            </Link></div>
           </motion.div>
         )}
 
@@ -148,6 +168,7 @@ export default function BlogListClient({ posts, settings, isAdmin }: { posts: Po
                 ease: [0.22, 1, 0.36, 1],
               }}
             >
+              <div className="relative h-full">{isAdmin && <button onClick={() => removePost(post)} className="absolute right-3 top-3 z-30 flex items-center gap-1 rounded-full border border-red-500/50 bg-background/95 px-3 py-2 text-xs font-semibold text-red-400"><Trash2 className="size-3.5"/> Delete</button>}
               <Link href={`/blogs/${post.slug}`} className="group block h-full">
                 <div className="h-full border border-border/50 rounded-xl p-6 md:p-8 transition-all duration-300 hover:border-[hsl(20,100%,70%)]/30 hover:bg-card/40 bg-card/20 backdrop-blur-sm">
                   {post.metadata.image && (
@@ -188,7 +209,7 @@ export default function BlogListClient({ posts, settings, isAdmin }: { posts: Po
                     <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-[hsl(20,100%,70%)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
                 </div>
-              </Link>
+              </Link></div>
             </motion.div>
           ))}
         </div>

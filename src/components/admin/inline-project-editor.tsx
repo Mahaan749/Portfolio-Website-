@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, Plus, X } from "lucide-react";
+import { Pencil, Plus, Trash2, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import type { CmsProject } from "@/lib/cms/types";
 
@@ -36,6 +36,15 @@ export default function InlineProjectEditor({ project }: { project?: CmsProject 
     finally { setBusy(false); }
   }
 
+  async function remove() {
+    if (!project || !window.confirm(`Delete “${project.title}” permanently?`)) return;
+    setBusy(true); setError("");
+    const { error: deleteError } = await createClient().from("projects").delete().eq("id", project.id);
+    setBusy(false);
+    if (deleteError) return setError(deleteError.message);
+    setOpen(false); router.refresh();
+  }
+
   const input = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm";
   return <>
     <button onClick={(event) => { event.preventDefault(); event.stopPropagation(); setOpen(true); }} className="pointer-events-auto flex items-center gap-2 rounded-full bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground shadow-lg">{project ? <Pencil className="size-3.5"/> : <Plus className="size-3.5"/>}{project ? "Edit" : "Add project"}</button>
@@ -50,7 +59,7 @@ export default function InlineProjectEditor({ project }: { project?: CmsProject 
         <label className="block text-sm">Replace image<input name="image" type="file" accept="image/*" className={`${input} mt-1`}/></label>
         <label className="flex gap-2 text-sm"><input type="checkbox" checked={form.published} onChange={e=>setForm({...form,published:e.target.checked})}/> Published</label>
         {error && <p className="text-sm text-red-400">{error}</p>}
-        <button disabled={busy} className="w-full rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground">{busy ? "Saving…" : "Save project"}</button>
+        <div className="flex gap-3"><button disabled={busy} className="flex-1 rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground">{busy ? "Saving…" : "Save project"}</button>{project && <button type="button" disabled={busy} onClick={remove} className="flex items-center gap-2 rounded-lg border border-red-500/50 px-4 py-3 font-semibold text-red-400"><Trash2 className="size-4"/> Delete</button>}</div>
       </form>
     </div>}
   </>;

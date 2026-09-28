@@ -14,6 +14,7 @@ export const revalidate = 60;
 export default async function BlogPage() {
   const [settings, isAdmin] = await Promise.all([getPageSettings("__blog_settings__", defaultBlogSettings), getIsAdmin()]);
   const managedPosts = (await getPublishedPosts()).map((post) => ({
+    cmsId: post.id,
     slug: post.slug,
     metadata: {
       title: post.title,
@@ -26,6 +27,7 @@ export default async function BlogPage() {
     wordCount: post.body.trim().split(/\s+/).length,
   }));
   const localPosts = getBlogPosts()
+    .filter(post => !(settings.hiddenPostSlugs ?? []).includes(post.slug))
     .sort((a, b) => {
       if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
         return -1;

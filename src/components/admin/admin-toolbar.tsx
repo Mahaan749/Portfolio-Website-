@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { HomeSettings } from "@/lib/cms/types";
-import { Pencil, Settings, LogOut, X } from "lucide-react";
+import { Pencil, Settings, LogOut, Plus, Trash2, X } from "lucide-react";
 
 export default function AdminToolbar({ settings }: { settings: HomeSettings }) {
   const router = useRouter();
@@ -58,9 +58,8 @@ export default function AdminToolbar({ settings }: { settings: HomeSettings }) {
                 ["author","Your name"], ["heroIntro","Hero introduction"], ["heroSubtitle","Hero subtitle"], ["skillsTitle","Skills heading"], ["experienceTitle","Learning heading"], ["experienceDescription","Learning description"], ["projectsTitle","Projects heading"], ["contactTitle","Contact heading"],
               ] as const).map(([key,label]) => <label key={key} className={key === "heroSubtitle" || key === "experienceDescription" ? "sm:col-span-2 text-sm" : "text-sm"}>{label}<input className={`${input} mt-1`} value={form[key] ?? ""} onChange={event => setForm({...form,[key]:event.target.value})}/></label>)}
               {([ ["educationLabel","Education label"], ["educationTitle","Course title"], ["educationInstitution","College / university"], ["educationPeriod","Study period"], ["certificationsTitle","Certifications heading"], ["topicsTitle","Topics heading"] ] as const).map(([key,label]) => <label key={key} className={key === "educationTitle" || key === "educationInstitution" ? "sm:col-span-2 text-sm" : "text-sm"}>{label}<input className={`${input} mt-1`} value={form[key]} onChange={event => setForm({...form,[key]:event.target.value})}/></label>)}
-              <label className="sm:col-span-2 text-sm">Certifications — one per line<textarea className={`${input} mt-1 min-h-32`} value={form.certifications.join("\n")} onChange={event => setForm({...form,certifications:event.target.value.split("\n").filter(Boolean)})}/></label>
-              <label className="sm:col-span-2 text-sm">Topics studied — one per line<textarea className={`${input} mt-1 min-h-32`} value={form.topics.join("\n")} onChange={event => setForm({...form,topics:event.target.value.split("\n").filter(Boolean)})}/></label>
             </div>
+            {([ ["certifications","Certifications & training"], ["topics","Topics studied"] ] as const).map(([key,label]) => <div key={key} className="mt-5 rounded-xl border border-border p-4"><div className="mb-3 flex items-center justify-between"><h3 className="font-semibold">{label}</h3><button onClick={() => setForm({...form,[key]:[...form[key],""]})} className="flex items-center gap-1 rounded-full border border-primary/40 px-3 py-1.5 text-xs text-primary"><Plus className="size-3.5"/> Add item</button></div><div className="space-y-2">{form[key].map((item,index) => <div key={`${key}-${index}`} className="flex gap-2"><input className={input} value={item} onChange={event => setForm({...form,[key]:form[key].map((current,currentIndex) => currentIndex === index ? event.target.value : current)})}/><button onClick={() => setForm({...form,[key]:form[key].filter((_,currentIndex) => currentIndex !== index)})} className="rounded-lg border border-red-500/40 px-3 text-red-400" aria-label={`Delete ${label} item`}><Trash2 className="size-4"/></button></div>)}</div></div>)}
             {message && <p className="mt-4 text-sm text-primary">{message}</p>}
             <button disabled={busy} onClick={save} className="mt-5 w-full rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-50">{busy ? "Saving…" : "Save changes"}</button>
           </div>
