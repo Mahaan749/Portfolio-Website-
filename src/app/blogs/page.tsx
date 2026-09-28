@@ -1,7 +1,8 @@
 import React from "react";
 import { getBlogPosts } from "@/lib/mdx";
 import BlogListClient from "./blog-list-client";
-import { getPublishedPosts } from "@/lib/cms/queries";
+import { defaultBlogSettings, getPageSettings, getPublishedPosts } from "@/lib/cms/queries";
+import { getIsAdmin } from "@/lib/cms/admin";
 
 export const metadata = {
   title: "Security Notes | Mahaan Shrestha",
@@ -11,6 +12,7 @@ export const metadata = {
 export const revalidate = 60;
 
 export default async function BlogPage() {
+  const [settings, isAdmin] = await Promise.all([getPageSettings("__blog_settings__", defaultBlogSettings), getIsAdmin()]);
   const managedPosts = (await getPublishedPosts()).map((post) => ({
     slug: post.slug,
     metadata: {
@@ -36,7 +38,7 @@ export default async function BlogPage() {
       wordCount: post.content.trim().split(/\s+/).length,
     }));
 
-  return <BlogListClient posts={[...managedPosts, ...localPosts].sort((a, b) =>
+  return <BlogListClient settings={settings} isAdmin={isAdmin} posts={[...managedPosts, ...localPosts].sort((a, b) =>
     new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
   )} />;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -13,6 +13,11 @@ export default function AdminToolbar({ settings }: { settings: HomeSettings }) {
   const [form, setForm] = useState(settings);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  useEffect(() => {
+    const show = () => setOpen(true);
+    window.addEventListener("open-homepage-editor", show);
+    return () => window.removeEventListener("open-homepage-editor", show);
+  }, []);
 
   async function save() {
     setBusy(true); setMessage("");
@@ -52,6 +57,9 @@ export default function AdminToolbar({ settings }: { settings: HomeSettings }) {
               {([
                 ["author","Your name"], ["heroIntro","Hero introduction"], ["heroSubtitle","Hero subtitle"], ["skillsTitle","Skills heading"], ["experienceTitle","Learning heading"], ["experienceDescription","Learning description"], ["projectsTitle","Projects heading"], ["contactTitle","Contact heading"],
               ] as const).map(([key,label]) => <label key={key} className={key === "heroSubtitle" || key === "experienceDescription" ? "sm:col-span-2 text-sm" : "text-sm"}>{label}<input className={`${input} mt-1`} value={form[key] ?? ""} onChange={event => setForm({...form,[key]:event.target.value})}/></label>)}
+              {([ ["educationLabel","Education label"], ["educationTitle","Course title"], ["educationInstitution","College / university"], ["educationPeriod","Study period"], ["certificationsTitle","Certifications heading"], ["topicsTitle","Topics heading"] ] as const).map(([key,label]) => <label key={key} className={key === "educationTitle" || key === "educationInstitution" ? "sm:col-span-2 text-sm" : "text-sm"}>{label}<input className={`${input} mt-1`} value={form[key]} onChange={event => setForm({...form,[key]:event.target.value})}/></label>)}
+              <label className="sm:col-span-2 text-sm">Certifications — one per line<textarea className={`${input} mt-1 min-h-32`} value={form.certifications.join("\n")} onChange={event => setForm({...form,certifications:event.target.value.split("\n").filter(Boolean)})}/></label>
+              <label className="sm:col-span-2 text-sm">Topics studied — one per line<textarea className={`${input} mt-1 min-h-32`} value={form.topics.join("\n")} onChange={event => setForm({...form,topics:event.target.value.split("\n").filter(Boolean)})}/></label>
             </div>
             {message && <p className="mt-4 text-sm text-primary">{message}</p>}
             <button disabled={busy} onClick={save} className="mt-5 w-full rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-50">{busy ? "Saving…" : "Save changes"}</button>

@@ -37,4 +37,23 @@ export type HomeSettings = {
   experienceDescription: string;
   projectsTitle: string;
   contactTitle: string;
+  educationLabel: string;
+  educationTitle: string;
+  educationInstitution: string;
+  educationPeriod: string;
+  certificationsTitle: string;
+  certifications: string[];
+  topicsTitle: string;
+  topics: string[];
+};
+
+export type CustomSection = { id: string; title: string; body: string };
+
+export type PageSettings = {
+  id?: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  ctaLabel?: string;
+  sections: CustomSection[];
 };

@@ -20,7 +20,7 @@ export default function HomeClient({ projects, settings, isAdmin }: { projects: 
       <main className={cn("bg-slate-100 dark:bg-transparent canvas-overlay-mode")}>
         <HeroSection intro={settings.heroIntro} author={settings.author} subtitle={settings.heroSubtitle} />
         <SkillsSection title={settings.skillsTitle} />
-        <ExperienceSection title={settings.experienceTitle} description={settings.experienceDescription} />
+        <ExperienceSection settings={settings} isAdmin={isAdmin} />
         <ProjectsSection managedProjects={projects} title={settings.projectsTitle} isAdmin={isAdmin} />
         <ContactSection title={settings.contactTitle} />
       </main>

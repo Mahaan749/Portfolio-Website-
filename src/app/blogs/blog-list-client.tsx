@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, ArrowUpRight, Clock } from "lucide-react";
 import { motion } from "motion/react";
+import type { PageSettings } from "@/lib/cms/types";
+import PageContentToolbar from "@/components/admin/page-content-toolbar";
 
 type Post = {
   slug: string;
@@ -32,12 +34,13 @@ function formatDate(dateStr: string) {
   });
 }
 
-export default function BlogListClient({ posts }: { posts: Post[] }) {
+export default function BlogListClient({ posts, settings, isAdmin }: { posts: Post[]; settings: PageSettings; isAdmin: boolean }) {
   const featured = posts[0];
   const rest = posts.slice(1);
 
   return (
     <div className="min-h-screen font-sans">
+      {isAdmin && <PageContentToolbar settings={settings} category="__blog_settings__" pageName="Blog page" />}
       {/* Decorative background */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-[hsl(20,100%,70%)]/5 blur-[120px]" />
@@ -52,10 +55,12 @@ export default function BlogListClient({ posts }: { posts: Post[] }) {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-20"
         >
-          <h1 className="font-display text-4xl md:text-6xl leading-[0.95] tracking-tight text-[hsl(20,100%,70%)]">
-            Blog Section
-          </h1>
+          {settings.eyebrow && <p className="mb-4 font-mono text-xs uppercase tracking-[.3em] text-[hsl(20,100%,70%)]">{settings.eyebrow}</p>}
+          <h1 className="font-display text-4xl md:text-6xl leading-[0.95] tracking-tight text-[hsl(20,100%,70%)]">{settings.title}</h1>
+          {settings.description && <p className="mt-6 max-w-2xl text-lg text-muted-foreground">{settings.description}</p>}
         </motion.div>
+
+        {settings.sections.length > 0 && <div className="mb-16 grid gap-6 md:grid-cols-2">{settings.sections.map(section => <section key={section.id} className="rounded-2xl border border-[hsl(20,100%,70%)]/20 bg-card/30 p-7 backdrop-blur-sm"><h2 className="mb-3 font-display text-2xl text-[hsl(20,100%,70%)]">{section.title}</h2><p className="whitespace-pre-line leading-relaxed text-muted-foreground">{section.body}</p></section>)}</div>}
 
         {/* Featured post */}
         {featured && (

@@ -5,49 +5,32 @@ import { cn } from "@/lib/utils";
 import SectionWrapper from "../ui/section-wrapper";
 import { motion } from "motion/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Award, BookOpen, GraduationCap } from "lucide-react";
+import { Award, BookOpen, GraduationCap, Pencil } from "lucide-react";
+import type { HomeSettings } from "@/lib/cms/types";
 
-const ExperienceSection = ({ title = "What I Have Learned", description = "Education, certifications and practical study." }: { title?: string; description?: string }) => {
-  const certificates = [
-    "Certified SOC Practitioner Fundamentals - CyberExam",
-    "GRC Fundamentals and Certified GRC Practitioner - CyberExam",
-    "ISO/IEC 27001:2022 Information Security Associate - SkillFront",
-    "Foundations of Log Analysis for Cyber Defense - Red Team Leaders",
-    "Certified LLM Security Professional - Red Team Leaders",
-    "TryHackMe Pre-Security Learning Path",
-    "ISC2 Certified in Cybersecurity coursework - exam preparation in progress",
-  ];
-  const topics = [
-    "Networking, TCP/IP and DNS",
-    "Windows and Linux fundamentals",
-    "Log analysis and alert triage",
-    "Web security and authorised testing",
-    "Incident documentation and evidence collection",
-    "MITRE ATT&CK awareness",
-    "ISO 27001, risk and policy fundamentals",
-    "Python and Git fundamentals",
-  ];
+const ExperienceSection = ({ settings, isAdmin = false }: { settings: HomeSettings; isAdmin?: boolean }) => {
   return (
     <SectionWrapper className="flex min-h-screen flex-col items-center justify-center py-24">
       <div className="w-full max-w-6xl px-4 md:px-8 mx-auto">
         <SectionHeader
           id="experience"
-          title={title}
-          desc={description}
+          title={settings.experienceTitle}
+          desc={settings.experienceDescription}
           className="static mb-12"
         />
+        {isAdmin && <button onClick={() => window.dispatchEvent(new Event("open-homepage-editor"))} className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-background/90 px-4 py-2 text-sm font-semibold text-primary"><Pencil className="size-4"/> Edit learning section</button>}
         <div className="grid gap-4 md:grid-cols-2">
           <Card className="md:col-span-2 border-primary/20 bg-card/80 backdrop-blur-md">
-            <CardHeader><GraduationCap className="text-primary"/><p className="font-mono text-xs uppercase tracking-[.2em] text-primary">Education</p><CardTitle className="text-2xl md:text-3xl">BSc (Hons) Ethical Hacking and Cyber Security</CardTitle></CardHeader>
-            <CardContent className="space-y-2 text-muted-foreground"><p>Softwarica College of IT &amp; E-Commerce, delivered with Coventry University</p><p>2024 - Present · Fourth Semester</p></CardContent>
+            <CardHeader><GraduationCap className="text-primary"/><p className="font-mono text-xs uppercase tracking-[.2em] text-primary">{settings.educationLabel}</p><CardTitle className="text-2xl md:text-3xl">{settings.educationTitle}</CardTitle></CardHeader>
+            <CardContent className="space-y-2 text-muted-foreground"><p>{settings.educationInstitution}</p><p>{settings.educationPeriod}</p></CardContent>
           </Card>
           <Card className="border-primary/20 bg-card/80 backdrop-blur-md">
-            <CardHeader><Award className="text-primary"/><p className="font-mono text-xs uppercase tracking-[.2em] text-primary">Certifications &amp; Training</p></CardHeader>
-            <CardContent><ul className="space-y-3 text-sm text-muted-foreground">{certificates.map(item => <li key={item} className="flex gap-3"><span className="text-primary">•</span>{item}</li>)}</ul></CardContent>
+            <CardHeader><Award className="text-primary"/><p className="font-mono text-xs uppercase tracking-[.2em] text-primary">{settings.certificationsTitle}</p></CardHeader>
+            <CardContent><ul className="space-y-3 text-sm text-muted-foreground">{settings.certifications.map(item => <li key={item} className="flex gap-3"><span className="text-primary">•</span>{item}</li>)}</ul></CardContent>
           </Card>
           <Card className="border-primary/20 bg-card/80 backdrop-blur-md">
-            <CardHeader><BookOpen className="text-primary"/><p className="font-mono text-xs uppercase tracking-[.2em] text-primary">Topics Studied</p></CardHeader>
-            <CardContent><ul className="space-y-3 text-sm text-muted-foreground">{topics.map(item => <li key={item} className="flex gap-3"><span className="text-primary">•</span>{item}</li>)}</ul></CardContent>
+            <CardHeader><BookOpen className="text-primary"/><p className="font-mono text-xs uppercase tracking-[.2em] text-primary">{settings.topicsTitle}</p></CardHeader>
+            <CardContent><ul className="space-y-3 text-sm text-muted-foreground">{settings.topics.map(item => <li key={item} className="flex gap-3"><span className="text-primary">•</span>{item}</li>)}</ul></CardContent>
           </Card>
         </div>
       </div>
