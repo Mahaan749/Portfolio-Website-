@@ -57,7 +57,7 @@ const Index: React.FC<IndexProps> = ({ setIsActive }) => {
         exit={{ opacity: 0 }}
         transition={{ delay: 0.5, duration: 0.4 }}
         onClick={(e) => e.stopPropagation()}
-        className="absolute bottom-0 right-0"
+        className="fixed right-6 top-24 z-[1300] rounded-xl bg-background/90 shadow-xl backdrop-blur sm:top-20"
       >
         <MotionToggle />
       </motion.div>

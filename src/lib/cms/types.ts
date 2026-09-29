@@ -27,6 +27,15 @@ export type CmsPost = {
   updated_at: string;
 };
 
+export type ContactSubmission = {
+  id: string;
+  full_name: string;
+  email: string;
+  message: string;
+  status: "unread" | "read";
+  created_at: string;
+};
+
 export type HomeSettings = {
   id?: string;
   author: string;

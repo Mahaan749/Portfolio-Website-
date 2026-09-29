@@ -21,7 +21,7 @@ export default function MotionToggle({ className }: { className?: string }) {
       onClick={() => setMotionPreference(reducedMotion ? "on" : "off")}
       aria-pressed={reducedMotion}
       aria-label={motionOn ? "Reduce motion and disable 3D" : "Enable motion and 3D"}
-      className={'bg-transparent gap-2 flex text-muted group hover:bg-transparent border-2 text-xs'}
+      className={'bg-background/80 gap-2 flex text-muted group hover:bg-background border border-primary/30 text-xs shadow-lg'}
       size={'sm'}
     >
       <Icon className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />

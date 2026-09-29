@@ -18,10 +18,11 @@ export default async function AdminPage() {
     .maybeSingle();
   if (!admin) redirect("/admin/login?error=not-authorized");
 
-  const [{ data: projects }, { data: posts }] = await Promise.all([
+  const [{ data: projects }, { data: posts }, { data: messages, error: messagesError }] = await Promise.all([
     supabase.from("projects").select("*").order("sort_order"),
     supabase.from("posts").select("*").order("published_at", { ascending: false }),
+    supabase.from("contact_submissions").select("*").order("created_at", { ascending: false }),
   ]);
 
-  return <AdminDashboard initialProjects={projects ?? []} initialPosts={posts ?? []} email={user.email ?? "Admin"} />;
+  return <AdminDashboard initialProjects={projects ?? []} initialPosts={posts ?? []} initialMessages={messages ?? []} messagesReady={!messagesError} email={user.email ?? "Admin"} />;
 }
